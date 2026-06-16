@@ -3,7 +3,10 @@ import {
   boolean,
   number,
   object,
+  pipe,
   string,
+  transform,
+  unknown,
   type InferOutput,
 } from "valibot";
 
@@ -22,3 +25,9 @@ export const ProductSchema = object({
 export const ProductsSchema = array(ProductSchema);
 
 export type Product = InferOutput<typeof ProductSchema>;
+
+export const NumberSchema = pipe(
+  unknown(),
+  transform((value) => Number(value)),
+  number(),
+);

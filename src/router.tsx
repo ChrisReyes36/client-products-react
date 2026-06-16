@@ -1,27 +1,40 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "./layouts/Layout";
+import Loading from "./components/Loading";
 import Products from "./views/Products";
 import NewProduct from "./views/NewProduct";
+import EditProduct from "./views/EditProduct";
 
-import { action as productsAction } from "./routes/products/action";
-import { loader as productsLoader } from "./routes/products/loader";
+import {
+  action as productsAction,
+  productAction,
+} from "./routes/products/action";
+import {
+  loader as productsLoader,
+  productLoader,
+} from "./routes/products/loader";
 
 export const Router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    hydrateFallbackElement: <Loading />,
     children: [
       {
         index: true,
         element: <Products />,
         loader: productsLoader,
-        HydrateFallback: () => <div>Cargando...</div>,
       },
       {
         path: "productos/nuevo",
         element: <NewProduct />,
         action: productsAction,
-        HydrateFallback: () => <div>Cargando...</div>,
+      },
+      {
+        path: "productos/:id/editar",
+        element: <EditProduct />,
+        loader: productLoader,
+        action: productAction,
       },
     ],
   },
