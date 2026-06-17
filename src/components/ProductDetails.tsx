@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Form, useFetcher, useNavigate } from "react-router-dom";
 import type { Product } from "../types";
 import { formatCurrency } from "../utils";
 
@@ -7,6 +7,7 @@ type ProductDetailsProps = {
 };
 
 export default function ProductDetails({ product }: ProductDetailsProps) {
+  const fetcher = useFetcher();
   const navigate = useNavigate();
 
   const isAvailable = product.availability;
@@ -18,7 +19,16 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
         {formatCurrency(product.price)}
       </td>
       <td className="p-3 text-lg text-gray-800">
-        {isAvailable ? "Disponible" : "No Disponible"}
+        <fetcher.Form method="POST">
+          <button
+            type="submit"
+            name="id"
+            value={product.id}
+            className={`${isAvailable ? "text-black" : "text-red-600"} rounded-lg p-2 text-sm uppercase font-black w-full border border-black cursor-pointer`}
+          >
+            {isAvailable ? "Disponible" : "No Disponible"}
+          </button>
+        </fetcher.Form>
       </td>
       <td className="p-3 text-lg text-gray-800 ">
         <div className="flex items-center gap-2">
@@ -28,6 +38,23 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
           >
             Editar
           </button>
+
+          <Form
+            className="w-full"
+            method="POST"
+            action={`productos/${product.id}/eliminar`}
+            onSubmit={(e) => {
+              if (!confirm("¿Eliminar?")) {
+                e.preventDefault();
+              }
+            }}
+          >
+            <input
+              type="submit"
+              value="Eliminar"
+              className="bg-red-600 text-white rounded-lg w-full p-2 uppercase font-bold text-sx text-center hover:bg-red-500 cursor-pointer"
+            />
+          </Form>
         </div>
       </td>
     </tr>

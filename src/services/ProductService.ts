@@ -83,3 +83,19 @@ export async function updateProduct(id: Product["id"], data: ProductData) {
     console.log(error);
   }
 }
+
+export async function deleteProduct(id: Product["id"]) {
+  try {
+    await api.delete(`/products/${id}`);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function updateProductAvailability(id: Product["id"]) {
+  try {
+    await api.patch(`/products/${id}/availability`);
+  } catch (error) {
+    console.log(error);
+  }
+}
